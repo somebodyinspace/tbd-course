@@ -1,0 +1,65 @@
+--1
+SELECT n_group, COUNT(*) as students_count
+FROM student
+GROUP BY n_group;
+
+--2
+Select n_group, max(score)
+From student
+GROUP BY n_group;
+
+--3
+Select surname, COUNT(surname)
+from student
+GROUP BY surname;
+
+--4
+Select substr(date_birth::varchar,1,4) as year, COUNT(substr(date_birth::varchar,1,4))
+From student
+GROUP BY year
+ORDER BY year;
+--5
+SELECT DISTINCT substr(n_group::text,1,1) as course,AVG(score)
+from student
+GROUP BY course
+ORDER BY course;
+
+--6
+Select n_group, AVG(score) AS avg_score
+from student
+WHERE CAST(n_group as text) LIKE '%2'
+GROUP BY n_group
+ORDER BY avg_score DESC
+LIMIT 1;
+
+--7
+Select n_group, AVG(score) AS avg_score
+from student
+GROUP BY n_group
+HAVING (AVG(score) <= 3.5)
+ORDER BY avg_score;
+
+--8
+Select n_group, COUNT(*), MAX(score), AVG(score), MIN(score)
+from student
+GROUP BY n_group
+ORDER BY n_group;
+
+--9
+Select name, surname, n_group, score
+from student
+WHERE (n_group::text) LIKE '2281' and score = (
+Select MAX(score)
+From student
+WHERE n_group = 2222
+)
+GROUP BY name, surname,n_group,score;
+
+--10
+Select name, surname, n_group, score
+from student
+WHERE score = (
+Select MAX(score)
+From student
+)
+GROUP BY name, surname,n_group,score;
